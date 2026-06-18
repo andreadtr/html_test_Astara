@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hyundai Belux — Commercial Analysis 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --hyundai-blue: #002C5F;
+    --accent: #00AAD2;
+    --red: #C0392B;
+    --amber: #E67E22;
+    --green: #1A7A4A;
+    --bg: #FFFFFF;
+    --surface: #F8F9FA;
+    --border: #E5E9EF;
+    --text: #111827;
+    --text-muted: #6B7280;
+    --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --mono: 'Consolas', 'Segoe UI Mono', ui-monospace, monospace;
+    --yoy-pos: #1A7A4A;
+    --yoy-neg: #C0392B;
+    --yoy-bg-pos: #E8F5EE;
+    --yoy-bg-neg: #FDECEA;
+  }
+  body { font-family: var(--font); background: var(--surface); color: var(--text); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .report { max-width: 1200px; margin: 0 auto; background: var(--bg); }
+
+  /* ── COVER BAND ───────────────────────────────────────── */
+  .cover { background: var(--hyundai-blue); color: #fff; padding: 48px 80px 44px; position: relative; overflow: hidden; }
+  .cover::after { content: ''; position: absolute; right: -120px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle at center, rgba(0,170,210,0.30), rgba(0,170,210,0) 70%); }
+  .cover-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 18px; }
+  .cover-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .cover h1 { font-size: 38px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 10px; }
+  .cover h1 .light { font-weight: 300; color: rgba(255,255,255,0.78); }
+  .cover-sub { font-size: 15px; color: rgba(255,255,255,0.72); font-weight: 400; }
+  .cover-sub b { color: #fff; font-weight: 600; }
+  .legend-note { display: inline-flex; align-items: center; gap: 12px; font-size: 11px; color: rgba(255,255,255,0.6); font-family: var(--mono); margin-top: 22px; }
+  .legend-note .chip { display: inline-flex; align-items: center; gap: 5px; }
+  .legend-note .sw { width: 22px; height: 8px; border-radius: 2px; }
+
+  /* ── COVER KPI GRID ───────────────────────────────────── */
+  .cover-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin: 0 80px; transform: translateY(-28px); border-radius: 12px; overflow: hidden; box-shadow: 0 12px 32px rgba(0,44,95,0.12); }
+  .kpi { background: var(--bg); padding: 20px 24px; }
+  .kpi-label { font-size: 11px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 8px; }
+  .kpi-value { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; color: var(--hyundai-blue); line-height: 1.05; }
+  .kpi-value .unit { font-size: 14px; font-weight: 500; color: var(--text-muted); margin-left: 3px; }
+  .kpi-foot { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .kpi-py { font-size: 11px; color: var(--text-muted); font-family: var(--mono); }
+
+  /* ── YoY BADGE ────────────────────────────────────────── */
+  .yoy { display: inline-flex; align-items: center; gap: 3px; font-family: var(--mono); font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
+  .yoy.pos { background: var(--yoy-bg-pos); color: var(--yoy-pos); }
+  .yoy.neg { background: var(--yoy-bg-neg); color: var(--yoy-neg); }
+  .yoy.neu { background: #F0F2F4; color: #4B5563; }
+  .yoy .arr { font-size: 10px; }
+
+  /* ── PAGE BODY ────────────────────────────────────────── */
+  .page { padding: 8px 80px 0; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin: 28px 0 18px; }
+  .section-num { font-family: var(--mono); font-size: 13px; font-weight: 700; color: var(--accent); }
+  .section-title { font-size: 19px; font-weight: 700; color: var(--hyundai-blue); letter-spacing: -0.01em; }
+  .section-rule { flex: 1; height: 1px; background: var(--border); }
+
+  /* ── INSIGHTS ─────────────────────────────────────────── */
+  .insights { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 28px; }
+  .insight { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .insight:nth-last-child(1), .insight:nth-last-child(2) { border-bottom: none; }
+  .insight-n { flex: 0 0 28px; height: 28px; border-radius: 7px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--hyundai-blue); }
+  .insight-body { flex: 1; }
+  .insight-body .t { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .insight-body .d { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+  .insight-body .d .pos { color: var(--green); font-weight: 600; }
+  .insight-body .d .neg { color: var(--red); font-weight: 600; }
+
+  /* ── FOOTER ───────────────────────────────────────────── */
+  .footer { background: var(--hyundai-blue); color: rgba(255,255,255,0.5); font-size: 11px; padding: 22px 80px; display: flex; justify-content: space-between; align-items: center; margin-top: 44px; font-family: var(--mono); }
+  .footer span { color: #fff; font-weight: 500; }
+
+  @media (max-width: 760px) {
+    .cover { padding: 36px 24px 32px; }
+    .cover h1 { font-size: 28px; }
+    .cover-kpis { grid-template-columns: 1fr; margin: 0 24px; }
+    .page { padding: 8px 24px 0; }
+    .insights { grid-template-columns: 1fr; }
+    .insight:nth-last-child(2) { border-bottom: 1px solid var(--border); }
+    .footer { padding: 18px 24px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+<div class="report">
+
+  <!-- ════════ COVER ════════ -->
+  <div class="cover">
+    <div class="cover-eyebrow"><span class="dot"></span> Hyundai Belux · Commercial Intelligence</div>
+    <h1>Commercial Analysis <span class="light">2026</span></h1>
+    <div class="cover-sub">Year-to-date performance · <b>January – May 2026</b> vs. same period <b>2025</b></div>
+    <div class="legend-note">
+      <span class="chip"><span class="sw" style="background:var(--green)"></span> Favourable YoY</span>
+      <span class="chip"><span class="sw" style="background:var(--red)"></span> Unfavourable YoY</span>
+      <span class="chip">Δ = vs. Jan–May 2025</span>
+    </div>
+  </div>
+
+  <!-- ════════ HEADLINE KPIs ════════ -->
+  <div class="cover-kpis">
+    <div class="kpi">
+      <div class="kpi-label">Vehicles Sold</div>
+      <div class="kpi-value">4,820 <span class="unit">units</span></div>
+      <div class="kpi-foot"><span class="yoy pos"><span class="arr">▲</span> +6.4%</span><span class="kpi-py">PY 4,530</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Net Revenue</div>
+      <div class="kpi-value">€142.6<span class="unit">M</span></div>
+      <div class="kpi-foot"><span class="yoy pos"><span class="arr">▲</span> +9.1%</span><span class="kpi-py">PY €130.7M</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Gross Margin</div>
+      <div class="kpi-value">11.8<span class="unit">%</span></div>
+      <div class="kpi-foot"><span class="yoy neg"><span class="arr">▼</span> −0.6 pp</span><span class="kpi-py">PY 12.4%</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Total Leads</div>
+      <div class="kpi-value">38,140</div>
+      <div class="kpi-foot"><span class="yoy pos"><span class="arr">▲</span> +12.3%</span><span class="kpi-py">PY 33,960</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Lead → Order Conversion</div>
+      <div class="kpi-value">12.6<span class="unit">%</span></div>
+      <div class="kpi-foot"><span class="yoy neg"><span class="arr">▼</span> −0.8 pp</span><span class="kpi-py">PY 13.4%</span></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Avg. Digital Response</div>
+      <div class="kpi-value">3.4<span class="unit">h</span></div>
+      <div class="kpi-foot"><span class="yoy pos"><span class="arr">▲</span> −1.1h</span><span class="kpi-py">PY 4.5h</span></div>
+    </div>
+  </div>
+
+  <!-- ════════ EXECUTIVE SUMMARY ════════ -->
+  <div class="page">
+    <div class="section-head">
+      <span class="section-num">00</span>
+      <span class="section-title">Executive Summary — 10 Key Insights</span>
+      <span class="section-rule"></span>
+    </div>
+
+    <div class="insights">
+      <div class="insight">
+        <div class="insight-n">1</div>
+        <div class="insight-body">
+          <div class="t">Volume growth outpaces the market</div>
+          <div class="d">4,820 units, <span class="pos">+6.4% YoY</span>, driven by retail demand recovery in Q1 and stronger dealer activation in BE.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">2</div>
+        <div class="insight-body">
+          <div class="t">Revenue up but margin compresses</div>
+          <div class="d">Net revenue <span class="pos">+9.1%</span> while gross margin slips <span class="neg">−0.6 pp</span> on heavier campaign discounting.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">3</div>
+        <div class="insight-body">
+          <div class="t">Lead generation is healthy</div>
+          <div class="d">38,140 leads, <span class="pos">+12.3%</span>, with digital channels contributing the bulk of incremental volume.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">4</div>
+        <div class="insight-body">
+          <div class="t">Conversion is the leak</div>
+          <div class="d">Lead-to-order down to 12.6% (<span class="neg">−0.8 pp</span>); more leads are not translating into orders.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">5</div>
+        <div class="insight-body">
+          <div class="t">Faster digital response</div>
+          <div class="d">Average first response improved to 3.4h (<span class="pos">−1.1h</span>), yet still above the 2h best-practice target.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">6</div>
+        <div class="insight-body">
+          <div class="t">Electrification mix accelerating</div>
+          <div class="d">BEV + PHEV share rises to ~31% of sales, reshaping the family mix and average ticket.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">7</div>
+        <div class="insight-body">
+          <div class="t">Stock aging needs attention</div>
+          <div class="d">A growing share of pipeline sits in the 90+ day bucket, tying up working capital and margin.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">8</div>
+        <div class="insight-body">
+          <div class="t">Lost-lead reasons concentrate</div>
+          <div class="d">Price and delivery time dominate loss reasons — a small set of fixable causes.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">9</div>
+        <div class="insight-body">
+          <div class="t">AM performance is uneven</div>
+          <div class="d">Top two account managers carry a disproportionate share of converted orders.</div>
+        </div>
+      </div>
+      <div class="insight">
+        <div class="insight-n">10</div>
+        <div class="insight-body">
+          <div class="t">Margin recovery is within reach</div>
+          <div class="d">Tightening discount governance and clearing aged stock could recover an estimated <span class="pos">+0.4–0.6 pp</span> of GM.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ FOOTER ════════ -->
+  <div class="footer">
+    <div>Hyundai Belux · Commercial Intelligence</div>
+    <div>Period <span>Jan–May 2026</span> · vs <span>Jan–May 2025</span></div>
+  </div>
+
+</div>
+</body>
+</html>
